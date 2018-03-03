@@ -86,7 +86,7 @@ def parse():
             _, output_ext = os.path.splitext(output_fname)
             if output_ext == '.json':
                 output_fmt = 'json'
-            elif output_ext in ('.yaml', '.yml'):
+            elif output_ext in {'.yaml', '.yml'}:
                 output_fmt = 'yaml'
             else:
                 output_fmt = 'nml'
@@ -109,7 +109,7 @@ def parse():
 
     # Read the input file
     if input_fname:
-        if input_fmt in ('json', 'yaml'):
+        if input_fmt in {'json', 'yaml'}:
             if input_fmt == 'json':
                 with open(input_fname) as input_file:
                     input_data = json.load(input_file)
@@ -159,7 +159,7 @@ def parse():
 
         # Write to output
         if not args.patch:
-            if output_fmt in ('json', 'yaml'):
+            if output_fmt in {'json', 'yaml'}:
                 if output_fmt == 'json':
                     input_data = input_data.todict(complex_tuple=True)
                     json.dump(input_data, output_file,

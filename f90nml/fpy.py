@@ -48,9 +48,9 @@ def pybool(v_str, strict_logical=True):
             raise ValueError('{0} is not a valid logical constant.'
                              ''.format(v_str))
 
-    if v_bool in ('.true.', '.t.', 'true', 't'):
+    if v_bool in {'.true.', '.t.', 'true', 't'}:
         return True
-    elif v_bool in ('.false.', '.f.', 'false', 'f'):
+    elif v_bool in {'.false.', '.f.', 'false', 'f'}:
         return False
     else:
         raise ValueError('{0} is not a valid logical constant.'.format(v_str))
@@ -60,7 +60,7 @@ def pystr(v_str):
     """Convert string repr of Fortran string to Python string."""
     assert isinstance(v_str, str)
 
-    if v_str[0] in ("'", '"') and v_str[0] == v_str[-1]:
+    if v_str[0] in {"'", '"'} and v_str[0] == v_str[-1]:
         quote = v_str[0]
         out = v_str[1:-1]
     else:

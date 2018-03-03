@@ -335,11 +335,11 @@ class Parser(object):
             # Populate the namelist group
             while g_name:
 
-                if self.token not in ('=', '%', '('):
+                if self.token not in {'=', '%', '('}:  # Containment of ``set`` is O(1)
                     self._update_tokens()
 
                 # Set the next active variable
-                if self.token in ('=', '(', '%'):
+                if self.token in {'=', '(', '%'}:
 
                     v_name, v_values = self._parse_variable(
                         g_vars,
@@ -357,7 +357,7 @@ class Parser(object):
                     v_values = []
 
                 # Finalise namelist group
-                if self.token in ('/', '&', '$'):
+                if self.token in {'/', '&', '$'}:
 
                     # Append any remaining patched variables
                     for v_name, v_val in grp_patch.items():
@@ -530,8 +530,8 @@ class Parser(object):
                 p_idx = 0
 
             # Add variables until next variable trigger
-            while (self.token not in ('=', '(', '%') or
-                   (self.prior_token, self.token) in (('=', '('), (',', '('))):
+            while (self.token not in {'=', '(', '%'} or
+                   (self.prior_token, self.token) in {('=', '('), (',', '(')}):
 
                 # Check for repeated values
                 if self.token == '*':
@@ -542,18 +542,18 @@ class Parser(object):
                     n_vals = 1
 
                 # First check for implicit null values
-                if self.prior_token in ('=', '%', ','):
-                    if (self.token in (',', '/', '&', '$') and
+                if self.prior_token in {'=', '%', ','}:
+                    if (self.token in {',', '/', '&', '$'} and
                             not (self.prior_token == ',' and
-                                 self.token in ('/', '&', '$'))):
+                                 self.token in {'/', '&', '$'})):
                         self._append_value(v_values, None, v_idx, n_vals)
 
                 elif self.prior_token == '*':
 
-                    if self.token not in ('/', '&', '$'):
+                    if self.token not in {'/', '&', '$'}:
                         self._update_tokens()
 
-                    if (self.token == '=' or (self.token in ('/', '&', '$') and
+                    if (self.token == '=' or (self.token in {'/', '&', '$'} and
                                               self.prior_token == '*')):
                         next_value = None
                     else:
@@ -569,7 +569,7 @@ class Parser(object):
                 n_vals = 1
 
                 # Exit for end of nml group (/, &, $) or null broadcast (=)
-                if self.token in ('/', '&', '$', '='):
+                if self.token in {'/', '&', '$', '='}:
                     break
                 else:
                     if patch_values:
@@ -607,7 +607,7 @@ class Parser(object):
         v_name = self.prior_token
         v_indices = []
 
-        while self.token in (',', '('):
+        while self.token in {',', '('}:
             v_indices.append(self._parse_index(v_name))
 
         return v_indices
@@ -622,7 +622,7 @@ class Parser(object):
             i_start = int(self.token)
             self._update_tokens()
         except ValueError:
-            if self.token in (',', ')'):
+            if self.token in {',', ')'}:
                 raise ValueError('{0} index cannot be empty.'.format(v_name))
             elif not self.token == ':':
                 raise
@@ -637,9 +637,9 @@ class Parser(object):
                 if self.token == ':':
                     raise ValueError('{0} end index cannot be implicit '
                                      'when using stride.'.format(v_name))
-                elif self.token not in (',', ')'):
+                elif self.token not in {',', ')'}:
                     raise
-        elif self.token in (',', ')'):
+        elif self.token in {',', ')'}:
             # Replace index with single-index range
             if i_start:
                 i_end = 1 + i_start
@@ -727,7 +727,7 @@ class Parser(object):
             try:
                 next_token = next(self.tokens)
             except StopIteration:
-                if not patch_skip or next_token in ('=', '(', '%'):
+                if not patch_skip or next_token in {'=', '(', '%'}:
                     patch_tokens = patch_value + patch_tokens
 
                 if self.pfile:
@@ -735,7 +735,7 @@ class Parser(object):
                 raise
 
         # Write patched values and whitespace + comments to file
-        if not patch_skip or next_token in ('=', '(', '%'):
+        if not patch_skip or next_token in {'=', '(', '%'}:
             patch_tokens = patch_value + patch_tokens
 
         if self.pfile:
